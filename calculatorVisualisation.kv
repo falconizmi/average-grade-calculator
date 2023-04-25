@@ -1,0 +1,251 @@
+<Button>:
+    background_color: (0,0,1,1)
+
+<MainWindow>:
+    name: "main"
+    semester_digit: semester_digit
+
+    FloatLayout:
+        canvas:
+            Color:
+                rgba: 0, 0, 0.6, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "MU Average Grade Calculator"
+            font_size: 56
+            pos_hint: {"center_x":0.5, "top":0.9}
+            size_hint: 0.35, 0.15
+
+        Label:
+            text: "Semester: "
+            font_size: 40
+            pos_hint: {"x":0.1, "top":0.5}
+            size_hint: 0.35, 0.15
+
+        TextInput:
+            id: semester_digit
+            font_size: 40
+            multiline: False
+            pos_hint: {"x": 0.45, "top":0.5}
+            size_hint: 0.4, 0.15
+
+        Button:
+            text: "Enter to calculator"
+            pos_hint:{"x":0.2,"y":0.1}
+            size_hint: 0.6, 0.2
+            background_color: (0,0,1,1)
+            font_size: 40
+            on_release:
+                root.manager.transition.direction = "right"
+                root.enter_to_calculator()
+
+<WhiteBorderLabel@Label>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Line:
+            width: 1
+            rectangle: self.x, self.y, self.width, self.height
+
+<BlackBorderLabel@Label>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Line:
+            width: 1
+            rectangle: self.x, self.y, self.width, self.height
+    color: 0, 0, 0, 1
+
+
+<Row@RecycleKVIDsDataViewBehavior+BoxLayout>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: "horizontal"
+
+
+    BlackBorderLabel:
+        id: name
+        size_hint_x: 0.6
+
+    BlackBorderLabel:
+        id: credits
+        size_hint_x: 0.2
+
+    BlackBorderLabel:
+        id: type_of_completion
+        size_hint_x: 0.2
+
+    BlackBorderLabel:
+        id: grade
+        size_hint_x: 0.2
+
+
+<SemesterWindow>:
+    course_name: course_name
+    course_credits: course_credits
+    course_type_of_completion: course_type_of_completion
+    course_grade: course_grade
+    rv: rv
+
+    canvas:
+        Color:
+            rgba: 0, 0, 0.6, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    name: "semester"
+    BoxLayout:
+        padding: 20
+        spacing: 20
+        orientation: 'horizontal'
+        canvas:
+            Color:
+                rgba: 0, 0, 0.6, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # Left side
+        BoxLayout:
+            orientation: 'vertical'
+
+            # Header
+            BoxLayout:
+                size_hint_y: 0.1
+                BoxLayout:
+                    orientation: 'horizontal'
+                    WhiteBorderLabel:
+                        text: 'Course Name'
+                        font_size: 25
+                        size_hint_x: 0.6
+
+                    WhiteBorderLabel:
+                        text: 'Credits'
+                        font_size: 20
+                        size_hint_x: 0.2
+
+                    WhiteBorderLabel:
+                        text: 'Type of\n Completion'
+                        halign: "center"
+                        font_size: 16
+                        size_hint_x: 0.2
+
+                    WhiteBorderLabel:
+                        text: 'Grade'
+                        font_size: 20
+                        size_hint_x: 0.2
+
+            RecycleView:
+                id: rv
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0.9, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                scroll_type: ['bars', 'content']
+                scroll_wheel_distance: dp(114)
+                bar_width: dp(10)
+                viewclass: 'Row'
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(2)
+                    padding: dp(2)
+
+        # Right side
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.4
+            spacing: 10
+
+            # Course details input
+            Label:
+                text: 'Course Name'
+                font_size: 24
+                size_hint: 1, 0.1
+
+            TextInput:
+                id: course_name
+                multiline: False
+                size_hint: 1, 0.1
+
+            Label:
+                text: 'Credits'
+                font_size: 24
+                size_hint: 1, 0.1
+
+            TextInput:
+                id: course_credits
+                multiline: False
+                size_hint: 1, 0.1
+
+            Label:
+                text: 'Type of Completion'
+                font_size: 24
+                size_hint: 1, 0.1
+
+            TextInput:
+                id: course_type_of_completion
+                multiline: False
+                size_hint: 1, 0.1
+
+            Label:
+                text: 'Grade'
+                font_size: 24
+                size_hint: 1, 0.1
+
+            TextInput:
+                id: course_grade
+                multiline: False
+                size_hint: 1, 0.1
+
+            # Features
+            GridLayout:
+                cols: 2
+                size_hint: 1, 0.5
+
+                Button:
+                    text: 'Add\nCourse'
+                    halign: "center"
+                    font_size: 18
+                    on_release: root.add_course()
+
+                Button:
+                    text: 'Calculate\naverage'
+                    halign: "center"
+                    font_size: 18
+                    on_release: root.calculate_average()
+
+                Button:
+                    text: 'Clear\nall'
+                    halign: "center"
+                    font_size: 18
+                    on_release: root.clear_all()
+
+                Button:
+                    text: 'Remove\nlast'
+                    halign: "center"
+                    font_size: 18
+                    on_release: root.remove_last()
+
+                # Space for future features
+                Button:
+                    text: 'Back to\nMain'
+                    halign: "center"
+                    font_size: 18
+                    on_release:
+                        root.manager.transition.direction = "left"
+                        root.back_to_main()
+                Label:
+                    text: ''
