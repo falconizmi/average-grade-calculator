@@ -6,6 +6,9 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 
+import database
+from time import sleep
+import os
 
 class MainWindow(Screen):
     semester_digit = ObjectProperty(None)
@@ -13,10 +16,16 @@ class MainWindow(Screen):
     def enter_to_calculator(self):
         if not self.semester_digit.text.isdigit():
             invalid_input_window("Number is needed.")
-        else:
-            sm.current = "semester"
-            self.semester_digit.text = ""
+            return
 
+
+        error = db.load(self.semester_digit.text)
+        if error != "":
+            error_window(error)
+            return
+
+        sm.current = "semester"
+        self.semester_digit.text = ""
 
 class SemesterWindow(Screen):
     course_name = ObjectProperty(None)
@@ -25,39 +34,49 @@ class SemesterWindow(Screen):
     course_grade = ObjectProperty(None)
     rv = ObjectProperty(None)
 
+    def on_enter(self, *args):
+        self.load()
+
     def back_to_main(self):
-        sm.current = "main"
         self.clear_all()
+        sm.current = "main"
 
     def add_course(self):
         # check if valid input
-        if not self.course_name.text != "":
-            invalid_input_window("Error: Name of course is needed.")
+        error = database.check_data(self.course_name.text.strip(),
+                                    self.course_credits.text.strip(),
+                                    self.course_type_of_completion.text.strip(),
+                                    self.course_grade.text.strip())
+        if error != "":
+            invalid_input_window(error)
             return
 
-        if not self.course_credits.text.isdigit():
-            invalid_input_window("Error: Credits is number value")
-            return
-
-        if not check_type_of_completion(self.course_type_of_completion.text):
-            invalid_input_window("Error: Type of completion is [z/k/zk].")
-            return
-
-        grade_error = check_grade(self.course_grade.text)
-        if grade_error != "":
-            invalid_input_window(grade_error)
-            return
-
-        self.rv.data.insert(0, {"name.text": self.course_name.text,
-                                "credits.text": self.course_credits.text,
-                                "type_of_completion.text": self.course_type_of_completion.text,
-                                "grade.text": self.course_grade.text
+        self.rv.data.insert(0, {"name.text": self.course_name.text.strip(),
+                                "credits.text": self.course_credits.text.strip(),
+                                "type_of_completion.text": self.course_type_of_completion.text.strip(),
+                                "grade.text": self.course_grade.text.strip()
                                 })
 
         self.course_name.text = ""
         self.course_credits.text = ""
         self.course_type_of_completion.text = ""
         self.course_grade.text = ""
+
+    def save(self):
+        courses = {}
+        for row in self.rv.data:
+            courses[row["name.text"]] = (row["credits.text"],
+                                           row["type_of_completion.text"],
+                                           row["grade.text"])
+        db.save(courses)
+
+    def load(self):
+        for c_name, rest in db.courses.items():
+            self.rv.data.insert(0, {"name.text": c_name,
+                                    "credits.text": rest[0],
+                                    "type_of_completion.text": rest[1],
+                                    "grade.text": rest[2]
+                                    })
 
     def clear_all(self):
         self.rv.data = []
@@ -71,7 +90,7 @@ class SemesterWindow(Screen):
     def calculate_average(self):
         if not self.rv.data:
             error_window("No grades to calculate average")
-            return 
+            return
 
         grade_value = {"A": 1, "B": 1.5,
                        "C": 2, "D": 2.5,
@@ -121,24 +140,9 @@ def calculated_grade_window(average):
     pop.open()
 
 
-def check_type_of_completion(type_of_completion):
-    return type_of_completion in ["k", "zk", "z"]
-
-
-def check_grade(grade):
-    success_grades = ["A", "B", "C", "D", "E"]
-    failing_grades = ["F", "X", "-"]
-    if grade == "" or not all([x in success_grades + failing_grades for x in grade]):
-        return "Error: Grade contains [A/B/C/D/E/F]"
-
-    if len(grade) > 1:
-        if not set(grade[:-1]).issubset({"F", "-"}):
-            return "Error: Grade format is not right"
-
-    return ""
-
-
 kv = Builder.load_file("calculatorVisualisation.kv")
+
+db = database.DataBase()
 
 sm = WindowManager()
 
