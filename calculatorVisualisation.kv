@@ -239,7 +239,6 @@
                     font_size: 18
                     on_release: root.remove_last()
 
-                # Space for future features
                 Button:
                     text: 'Back to\nMain'
                     halign: "center"
@@ -247,5 +246,9 @@
                     on_release:
                         root.manager.transition.direction = "left"
                         root.back_to_main()
-                Label:
-                    text: ''
+
+                Button:
+                    text: 'Save'
+                    halign: "center"
+                    font_size: 18
+                    on_release: root.save()
