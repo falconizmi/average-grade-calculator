@@ -7,8 +7,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 
 import database
-from time import sleep
-import os
+
 
 class MainWindow(Screen):
     semester_digit = ObjectProperty(None)
@@ -18,7 +17,6 @@ class MainWindow(Screen):
             invalid_input_window("Number is needed.")
             return
 
-
         error = db.load(self.semester_digit.text)
         if error != "":
             error_window(error)
@@ -26,6 +24,7 @@ class MainWindow(Screen):
 
         sm.current = "semester"
         self.semester_digit.text = ""
+
 
 class SemesterWindow(Screen):
     course_name = ObjectProperty(None)
@@ -66,8 +65,8 @@ class SemesterWindow(Screen):
         courses = {}
         for row in self.rv.data:
             courses[row["name.text"]] = (row["credits.text"],
-                                           row["type_of_completion.text"],
-                                           row["grade.text"])
+                                         row["type_of_completion.text"],
+                                         row["grade.text"])
         db.save(courses)
 
     def load(self):
@@ -99,13 +98,15 @@ class SemesterWindow(Screen):
         sum_grade_credits = 0
         sum_credits = 0
         for row in self.rv.data:
+            if row["type_of_completion.text"] != "zk":
+                continue
+
             for grade in row["grade.text"]:
                 credits_g = int(row["credits.text"])
                 sum_grade_credits += grade_value[grade] * credits_g
                 sum_credits += credits_g
 
         calculated_grade_window(round(sum_grade_credits/sum_credits, 2))
-
 
 
 class WindowManager(ScreenManager):
