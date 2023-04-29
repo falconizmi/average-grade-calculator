@@ -22,7 +22,7 @@ python averageGradeCalculator.py
 
 Once the application is running, you will be directed to the Main window, input a number of the term you want to calculate into the provided field.
 
-![image](https://user-images.githubusercontent.com/110352032/235270578-a2fcbfc5-1101-4ee2-8d1f-d3c2aa531b81.png)
+![image](https://user-images.githubusercontent.com/110352032/235273801-301b6d89-0b0a-404c-8492-c39e6521cc9c.png)
 
 Click on the "Enter to Calculator" button to direct to the Calculator window.
 
