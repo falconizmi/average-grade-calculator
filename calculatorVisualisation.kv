@@ -3,7 +3,7 @@
 
 <MainWindow>:
     name: "main"
-    semester_digit: semester_digit
+    semester_number: semester_number
 
     FloatLayout:
         canvas:
@@ -25,14 +25,14 @@
             size_hint: 0.35, 0.15
 
         TextInput:
-            id: semester_digit
+            id: semester_number
             font_size: 40
             multiline: False
             pos_hint: {"x": 0.45, "top":0.5}
             size_hint: 0.4, 0.15
 
         Button:
-            text: "Enter to calculator"
+            text: "Enter to Calculator"
             pos_hint:{"x":0.2,"y":0.1}
             size_hint: 0.6, 0.2
             background_color: (0,0,1,1)
@@ -86,7 +86,7 @@
         size_hint_x: 0.2
 
 
-<SemesterWindow>:
+<CalculatorWindow>:
     course_name: course_name
     course_credits: course_credits
     course_type_of_completion: course_type_of_completion
@@ -100,7 +100,7 @@
             pos: self.pos
             size: self.size
 
-    name: "semester"
+    name: "calculator"
     BoxLayout:
         padding: 20
         spacing: 20
@@ -222,19 +222,19 @@
                     on_release: root.add_course()
 
                 Button:
-                    text: 'Calculate\naverage'
+                    text: 'Calculate\nAverage'
                     halign: "center"
                     font_size: 18
                     on_release: root.calculate_average()
 
                 Button:
-                    text: 'Clear\nall'
+                    text: 'Clear\nAll'
                     halign: "center"
                     font_size: 18
                     on_release: root.clear_all()
 
                 Button:
-                    text: 'Remove\nlast'
+                    text: 'Remove\nLast'
                     halign: "center"
                     font_size: 18
                     on_release: root.remove_last()

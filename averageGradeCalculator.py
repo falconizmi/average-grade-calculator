@@ -10,23 +10,23 @@ import database
 
 
 class MainWindow(Screen):
-    semester_digit = ObjectProperty(None)
+    semester_number = ObjectProperty(None)
 
     def enter_to_calculator(self):
-        if not self.semester_digit.text.isdigit():
+        if not self.semester_number.text.isdigit():
             invalid_input_window("Number is needed.")
             return
 
-        error = db.load(self.semester_digit.text)
+        error = db.load(self.semester_number.text)
         if error != "":
             error_window(error)
             return
 
-        sm.current = "semester"
-        self.semester_digit.text = ""
+        sm.current = "calculator"
+        self.semester_number.text = ""
 
 
-class SemesterWindow(Screen):
+class CalculatorWindow(Screen):
     course_name = ObjectProperty(None)
     course_credits = ObjectProperty(None)
     course_type_of_completion = ObjectProperty(None)
@@ -147,7 +147,7 @@ db = database.DataBase()
 
 sm = WindowManager()
 
-screens = [MainWindow(name="main"), SemesterWindow(name="semester")]
+screens = [MainWindow(name="main"), CalculatorWindow(name="calculator")]
 for screen in screens:
     sm.add_widget(screen)
 
