@@ -45,7 +45,7 @@ def check_data(c_name, c_credits, c_type_of_type_of_comp, c_grade):
     if error != "":
         return error
 
-    error = check_grade(c_grade)
+    error = check_grade(c_grade, c_type_of_type_of_comp)
     if error != "":
         return error
 
@@ -70,14 +70,23 @@ def check_type_of_completion(c_type_of_completion):
     return "Error: Type of completion is [z/k/zk]."
 
 
-def check_grade(c_grade):
-    success_grades = ["A", "B", "C", "D", "E"]
-    failing_grades = ["F", "X", "-"]
-    if c_grade == "" or not all([x in success_grades + failing_grades for x in c_grade]):
-        return "Error: Grade contains [A/B/C/D/E/F]"
+def check_grade(c_grade, c_type_of_completion):
+    zk_success_grades = ["A", "B", "C", "D", "E"]
+    zk_fail_grades = ["F"]
+    z_k_success_grades = ["P"]
+    z_k_fail_grades = ["N"]
+    other_fail_grades = ["X", "-"]
+    if c_type_of_completion == "zk":
+        if c_grade == "" or not all([x in zk_success_grades + zk_fail_grades +
+                                     other_fail_grades for x in c_grade]):
+            return "Error: Grade contains [A/B/C/D/E/F/X/-]"
+    else:
+        if c_grade == "" or not all([x in z_k_success_grades + z_k_fail_grades +
+                                     other_fail_grades for x in c_grade]):
+            return "Error: Grade contains [P/N/X/-]"
 
     if len(c_grade) > 1:
-        if not set(c_grade[:-1]).issubset({"F", "-"}):
+        if not (set(c_grade[:-1]).issubset({"F", "-"}) or set(c_grade[:-1]).issubset({"N", "-"})):
             return "Error: Grade format is not right"
 
     return ""
