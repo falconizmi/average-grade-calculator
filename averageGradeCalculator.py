@@ -42,19 +42,25 @@ class CalculatorWindow(Screen):
 
     def add_course(self):
         # check if valid input
-        error = database.check_data(self.course_name.text.strip(),
-                                    self.course_credits.text.strip(),
-                                    self.course_type_of_completion.text.strip(),
-                                    self.course_grade.text.strip())
+        error = database.check_data(
+            self.course_name.text.strip(),
+            self.course_credits.text.strip(),
+            self.course_type_of_completion.text.strip(),
+            self.course_grade.text.strip(),
+        )
         if error != "":
             invalid_input_window(error)
             return
 
-        self.rv.data.insert(0, {"name.text": self.course_name.text.strip(),
-                                "credits.text": self.course_credits.text.strip(),
-                                "type_of_completion.text": self.course_type_of_completion.text.strip(),
-                                "grade.text": self.course_grade.text.strip()
-                                })
+        self.rv.data.insert(
+            0,
+            {
+                "name.text": self.course_name.text.strip(),
+                "credits.text": self.course_credits.text.strip(),
+                "type_of_completion.text": self.course_type_of_completion.text.strip(),
+                "grade.text": self.course_grade.text.strip(),
+            },
+        )
 
         self.course_name.text = ""
         self.course_credits.text = ""
@@ -64,18 +70,24 @@ class CalculatorWindow(Screen):
     def save(self):
         courses = {}
         for row in self.rv.data:
-            courses[row["name.text"]] = (row["credits.text"],
-                                         row["type_of_completion.text"],
-                                         row["grade.text"])
+            courses[row["name.text"]] = (
+                row["credits.text"],
+                row["type_of_completion.text"],
+                row["grade.text"],
+            )
         db.save(courses)
 
     def load(self):
         for c_name, rest in db.courses.items():
-            self.rv.data.insert(0, {"name.text": c_name,
-                                    "credits.text": rest[0],
-                                    "type_of_completion.text": rest[1],
-                                    "grade.text": rest[2]
-                                    })
+            self.rv.data.insert(
+                0,
+                {
+                    "name.text": c_name,
+                    "credits.text": rest[0],
+                    "type_of_completion.text": rest[1],
+                    "grade.text": rest[2],
+                },
+            )
 
     def clear_all(self):
         self.rv.data = []
@@ -91,10 +103,16 @@ class CalculatorWindow(Screen):
             error_window("No grades to calculate average")
             return
 
-        grade_value = {"A": 1, "B": 1.5,
-                       "C": 2, "D": 2.5,
-                       "E": 3, "F": 4,
-                       "X": 4, "-": 4}
+        grade_value = {
+            "A": 1,
+            "B": 1.5,
+            "C": 2,
+            "D": 2.5,
+            "E": 3,
+            "F": 4,
+            "X": 4,
+            "-": 4,
+        }
         sum_grade_credits = 0
         sum_credits = 0
         for row in self.rv.data:
@@ -106,7 +124,7 @@ class CalculatorWindow(Screen):
                 sum_grade_credits += grade_value[grade] * credits_g
                 sum_credits += credits_g
 
-        calculated_grade_window(round(sum_grade_credits/sum_credits, 2))
+        calculated_grade_window(round(sum_grade_credits / sum_credits, 2))
 
 
 class WindowManager(ScreenManager):
@@ -116,27 +134,32 @@ class WindowManager(ScreenManager):
 def error_window(error):
     content = GridLayout(cols=1)
     content.add_widget(Label(text=error))
-    content.add_widget(Label(text="(To close this window click anywhere outside the window.)"))
-    pop = Popup(title='Error',
-                content=content,
-                size_hint=(None, None), size=(400, 400))
+    content.add_widget(
+        Label(text="(To close this window click anywhere outside the window.)")
+    )
+    pop = Popup(title="Error", content=content, size_hint=(None, None), size=(400, 400))
     pop.open()
 
 
 def invalid_input_window(error):
     content = GridLayout(cols=1)
     content.add_widget(Label(text=error))
-    content.add_widget(Label(text="(To close this window click anywhere outside the window.)"))
-    pop = Popup(title='Invalid Input',
-                content=content,
-                size_hint=(None, None), size=(400, 400))
+    content.add_widget(
+        Label(text="(To close this window click anywhere outside the window.)")
+    )
+    pop = Popup(
+        title="Invalid Input", content=content, size_hint=(None, None), size=(400, 400)
+    )
     pop.open()
 
 
 def calculated_grade_window(average):
-    pop = Popup(title='Calculated Grade',
-                content=Label(text=f'Calculated grade: {average}'),
-                size_hint=(None, None), size=(400, 400))
+    pop = Popup(
+        title="Calculated Grade",
+        content=Label(text=f"Calculated grade: {average}"),
+        size_hint=(None, None),
+        size=(400, 400),
+    )
 
     pop.open()
 
@@ -159,5 +182,5 @@ class AverageGradeCalculatorApp(App):
         return sm
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     AverageGradeCalculatorApp().run()
