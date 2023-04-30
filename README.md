@@ -1,5 +1,6 @@
 [![Black](https://github.com/falconizmi/average-grade-calculator/actions/workflows/black.yml/badge.svg)](https://github.com/falconizmi/average-grade-calculator/actions/workflows/black.yml)
 [![Mypy Type Checker](https://github.com/falconizmi/average-grade-calculator/actions/workflows/mypy.yml/badge.svg?branch=main)](https://github.com/falconizmi/average-grade-calculator/actions/workflows/mypy.yml)
+[![isort](https://github.com/falconizmi/average-grade-calculator/actions/workflows/isort.yml/badge.svg?branch=main)](https://github.com/falconizmi/average-grade-calculator/actions/workflows/isort.yml)
 # Average Grade Calculator
 
 This is an app coded in Python using Kivy, which calculates the average grade for a single term at Masaryk University. The calculation is based on the developer's understanding of the grading system at Masaryk University and is not affiliated with Masaryk University.
