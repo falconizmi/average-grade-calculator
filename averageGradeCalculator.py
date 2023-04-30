@@ -8,11 +8,13 @@ from kivy.uix.popup import Popup
 
 import database
 
+from typing import Dict, Tuple
+
 
 class MainWindow(Screen):
     semester_number = ObjectProperty(None)
 
-    def enter_to_calculator(self):
+    def enter_to_calculator(self) -> None:
         if not self.semester_number.text.isdigit():
             invalid_input_window("Number is needed.")
             return
@@ -33,14 +35,14 @@ class CalculatorWindow(Screen):
     course_grade = ObjectProperty(None)
     rv = ObjectProperty(None)
 
-    def on_enter(self, *args):
+    def on_enter(self, *args: object) -> None:
         self.load()
 
-    def back_to_main(self):
+    def back_to_main(self) -> None:
         self.clear_all()
         sm.current = "main"
 
-    def add_course(self):
+    def add_course(self) -> None:
         # check if valid input
         error = database.check_data(
             self.course_name.text.strip(),
@@ -67,8 +69,8 @@ class CalculatorWindow(Screen):
         self.course_type_of_completion.text = ""
         self.course_grade.text = ""
 
-    def save(self):
-        courses = {}
+    def save(self) -> None:
+        courses: Dict[str, Tuple[str, str, str]] = {}
         for row in self.rv.data:
             courses[row["name.text"]] = (
                 row["credits.text"],
@@ -77,7 +79,8 @@ class CalculatorWindow(Screen):
             )
         db.save(courses)
 
-    def load(self):
+    def load(self) -> None:
+        assert db.courses is not None
         for c_name, rest in db.courses.items():
             self.rv.data.insert(
                 0,
@@ -89,16 +92,16 @@ class CalculatorWindow(Screen):
                 },
             )
 
-    def clear_all(self):
+    def clear_all(self) -> None:
         self.rv.data = []
 
-    def remove_last(self):
+    def remove_last(self) -> None:
         if self.rv.data:
             self.rv.data.pop(0)
         else:
             invalid_input_window("There is no data")
 
-    def calculate_average(self):
+    def calculate_average(self) -> None:
         if not self.rv.data:
             error_window("No grades to calculate average")
             return
@@ -113,7 +116,7 @@ class CalculatorWindow(Screen):
             "X": 4,
             "-": 4,
         }
-        sum_grade_credits = 0
+        sum_grade_credits = 0.0
         sum_credits = 0
         for row in self.rv.data:
             if row["type_of_completion.text"] != "zk":
@@ -131,7 +134,7 @@ class WindowManager(ScreenManager):
     pass
 
 
-def error_window(error):
+def error_window(error: str) -> None:
     content = GridLayout(cols=1)
     content.add_widget(Label(text=error))
     content.add_widget(
@@ -141,7 +144,7 @@ def error_window(error):
     pop.open()
 
 
-def invalid_input_window(error):
+def invalid_input_window(error: str) -> None:
     content = GridLayout(cols=1)
     content.add_widget(Label(text=error))
     content.add_widget(
@@ -153,7 +156,7 @@ def invalid_input_window(error):
     pop.open()
 
 
-def calculated_grade_window(average):
+def calculated_grade_window(average: float) -> None:
     pop = Popup(
         title="Calculated Grade",
         content=Label(text=f"Calculated grade: {average}"),
@@ -178,7 +181,7 @@ sm.current = "main"
 
 
 class AverageGradeCalculatorApp(App):
-    def build(self):
+    def build(self) -> WindowManager:
         return sm
 
 

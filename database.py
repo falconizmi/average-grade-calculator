@@ -1,12 +1,13 @@
 import os
+from typing import Optional, Dict, Tuple
 
 
 class DataBase:
-    def __init__(self):
-        self.filename = None
-        self.courses = None
+    def __init__(self) -> None:
+        self.filename: Optional[str] = None
+        self.courses: Optional[Dict[str, Tuple[str, str, str]]] = None
 
-    def load(self, semester_number):
+    def load(self, semester_number: str) -> str:
         self.filename = f"semester-{semester_number}.csv"
         self.courses = {}
 
@@ -35,7 +36,8 @@ class DataBase:
                 self.courses[c_name] = (c_credits, c_type_of_type_of_comp, c_grade)
         return ""
 
-    def save(self, courses):
+    def save(self, courses: Dict[str, Tuple[str, str, str]]) -> None:
+        assert self.filename is not None
         with open(self.filename, "w") as f:
             for course in courses:
                 f.write(
@@ -43,7 +45,9 @@ class DataBase:
                 )
 
 
-def check_data(c_name, c_credits, c_type_of_type_of_comp, c_grade):
+def check_data(
+    c_name: str, c_credits: str, c_type_of_type_of_comp: str, c_grade: str
+) -> str:
     error = check_name(c_name)
     if error != "":
         return error
@@ -63,25 +67,25 @@ def check_data(c_name, c_credits, c_type_of_type_of_comp, c_grade):
     return ""
 
 
-def check_name(c_name):
+def check_name(c_name: str) -> str:
     if c_name == "":
         return "Error: Name of course is needed."
     return ""
 
 
-def check_credits(c_credits):
+def check_credits(c_credits: str) -> str:
     if not c_credits.isdigit():
         return "Error: Credits is number value"
     return ""
 
 
-def check_type_of_completion(c_type_of_completion):
+def check_type_of_completion(c_type_of_completion: str) -> str:
     if c_type_of_completion in ["k", "zk", "z"]:
         return ""
     return "Error: Type of completion is [z/k/zk]."
 
 
-def check_grade(c_grade, c_type_of_completion):
+def check_grade(c_grade: str, c_type_of_completion: str) -> str:
     zk_success_grades = ["A", "B", "C", "D", "E"]
     zk_fail_grades = ["F"]
     z_k_success_grades = ["P"]
