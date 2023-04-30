@@ -7,6 +7,7 @@ name = "pypi"
 kivy = {extras = ["full"], version = "*"}
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.9"
