@@ -9,6 +9,7 @@ kivy = {extras = ["full"], version = "*"}
 [dev-packages]
 black = "*"
 mypy = "*"
+isort = "*"
 
 [requires]
 python_version = "3.9"
