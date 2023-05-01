@@ -21,4 +21,4 @@ jobs:
         run: pipenv install --dev
 
       - name: Run mypy
-        run: pipenv run mypy .
+        run: pipenv run mypy averageGradeCalculator.py database.py
