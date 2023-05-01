@@ -10,15 +10,45 @@ https://github.com/falconizmi/average-grade-calculator
 
 To run this application, you will need:
 
-- Python 3.7 or higher
-- Kivy 2.0.0 or higher
+- Python 3.9
+- Git (if you want to clone the repository)
+
+## Installation
+
+Clone the repository using the following command:
+
+```commandline
+git clone https://github.com/falconizmi/average-grade-calculator.git
+```
+
+or download zip file.
+
+Navigate to the project directory:
+
+```commandline
+cd average-grade-calculator
+```
+
+Install the required dependencies:
+
+```commandline
+pip install pipenv
+pipenv shell
+pipenv install
+```
+
+If windows and not working, then run this:
+
+```commandline
+pipenv install kivy_deps.sdl2
+```
 
 
 ## Usage
 
 To run the application, execute the following command:
 
-```
+```commandline
 python averageGradeCalculator.py
 ```
 
