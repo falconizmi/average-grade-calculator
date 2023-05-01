@@ -40,6 +40,7 @@ class CalculatorWindow(Screen):
 
     def back_to_main(self) -> None:
         self.clear_all()
+        self.clear_text_field()
         sm.current = "main"
 
     def add_course(self) -> None:
@@ -64,6 +65,9 @@ class CalculatorWindow(Screen):
             },
         )
 
+        self.clear_text_field()
+
+    def clear_text_field(self) -> None:
         self.course_name.text = ""
         self.course_credits.text = ""
         self.course_type_of_completion.text = ""
