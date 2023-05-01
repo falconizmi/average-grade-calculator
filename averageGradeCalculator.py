@@ -131,7 +131,10 @@ class CalculatorWindow(Screen):
                 sum_grade_credits += grade_value[grade] * credits_g
                 sum_credits += credits_g
 
-        calculated_grade_window(round(sum_grade_credits / sum_credits, 2))
+        average = 1.0
+        if sum_credits != 0:
+            average = round(sum_grade_credits / sum_credits, 2)
+        calculated_grade_window(average)
 
 
 class WindowManager(ScreenManager):
